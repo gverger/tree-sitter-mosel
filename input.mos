@@ -36,6 +36,12 @@ model my_model
 
     e: set of string
     t1:array ( e, rs:set of real, range, integer ) of real
-    t2:array ( {"i1","i2"}, 1..3 ) of integer
+    !t2:array ( {"i1","i2"}, 1..3 ) of integer
+    r1: record
+          i,j:integer
+        end-record
+    r2,r3: record
+             i,j:integer
+           end-record
   end-declarations
 end-model

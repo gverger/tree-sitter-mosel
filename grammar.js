@@ -98,7 +98,8 @@ module.exports = grammar({
         $.set_type,
         $.range_type,
         $.list_type,
-        $.array_type
+        $.array_type,
+        $.record_type
       )
     ),
 
@@ -147,6 +148,12 @@ module.exports = grammar({
       ")",
       "of",
       $.elementary_type
+    ),
+
+    record_type: $ => seq(
+      "record",
+      repeat($.declaration_definition),
+      "end-record"
     ),
 
     basic_type: $ => choice(
