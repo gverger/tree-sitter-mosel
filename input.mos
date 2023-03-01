@@ -1,0 +1,33 @@
+model my_model
+  ! Super model
+  uses "malib"
+  uses "malibnum2";
+  uses "malibnum3", "malibnum4";
+
+  imports 'mypkg';
+
+  options noimplicit, dynonly;
+
+  version 1;
+  version 1.2
+  version 1.2.3
+
+  include "other.mos"
+
+  parameters
+    size=12
+    R=12.67
+    F="myfile"
+    B=true
+  end-parameters
+
+  declarations
+    i,j: shared integer
+    str: string
+    x,y,z: mpvar
+    s1: shared set of string
+    ds: set of constant date   ! type 'date' from module 'mmsystem'
+
+    r: dynamic range 1..3
+  end-declarations
+end-model

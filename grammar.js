@@ -1,5 +1,5 @@
 module.exports = grammar({
-  name : "Mosel",
+  name : "mosel",
 
   extras: $ => [
     $.comment,
@@ -8,7 +8,7 @@ module.exports = grammar({
   ],
 
   rules : {
-    souce_file: $ => repeat($._definition),
+    source_file: $ => repeat($._definition),
 
     _definition: $ => choice(
       $.model_definition
@@ -19,6 +19,7 @@ module.exports = grammar({
       field('name', $.identifier),
       repeat($._directive),
       optional($._parameters),
+      optional($._declarations),
       // $._body,
       'end-model'
     ),
@@ -81,6 +82,64 @@ module.exports = grammar({
       field('default_value', $.value)
     ),
 
+    _declarations: $ => seq(
+      'declarations',
+      repeat($.declaration_definition),
+      'end-declarations'
+    ),
+
+
+    declaration_definition: $ => seq(
+      commaSep1(field('variable', $.identifier)),
+      ':',
+      optional('shared'),
+      choice(
+        $.elementary_type,
+        $.set_type,
+        $.range_type,
+        $.list_type
+      )
+    ),
+
+    elementary_type: $ => seq(
+      choice(
+        $.basic_type,
+        $.mp_type,
+        $.user_or_external_type
+      )
+    ),
+
+    set_type: $ => seq(
+      optional('dynamic'),
+      'set of',
+      optional('constant'),
+      $.elementary_type
+    ),
+
+    range_type: $ => seq(
+      optional('dynamic'),
+      'range',
+      optional($.range)
+    ),
+
+    list_type: $ => seq(
+      'list of',
+      $.elementary_type
+    ),
+
+    basic_type: $ => choice(
+      "integer",
+      "real",
+      "string",
+      "boolean"),
+
+    mp_type: $ => choice(
+      "mpvar",
+      "linctr"
+    ),
+
+    user_or_external_type: $ => $.identifier,
+
     value: $ => choice(
       $.integer,
       $.bool,
@@ -93,6 +152,7 @@ module.exports = grammar({
     integer: $ => /\d+/,
     real: $ => /\d+\.\d+/,
     bool: $ => choice('true', 'false'),
+    range: $ => seq(field('min', $.integer), '..', field('max', $.integer)),
 
     quoted_string: $ => choice(
       /"[^"]*"/,

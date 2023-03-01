@@ -1,0 +1,7 @@
+=====
+Model
+=====
+
+imports "ok"
+// <- keyword
+//       ^ string

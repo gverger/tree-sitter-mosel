@@ -1,0 +1,13 @@
+=====
+Model
+=====
+
+model my_model
+end-model
+
+--------
+
+(source_file
+  (model_definition
+    (identifier))
+)
