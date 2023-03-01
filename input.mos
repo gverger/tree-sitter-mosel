@@ -43,5 +43,10 @@ model my_model
     r2,r3: record
              i,j:integer
            end-record
+
+    myfunct2: function: set of integer
+    myfunct: function (real):real
+    myproc: procedure (real)
+    myproc2: procedure
   end-declarations
 end-model

@@ -92,15 +92,28 @@ module.exports = grammar({
     declaration_definition: $ => seq(
       commaSep1(field('variable', $.identifier)),
       ':',
-      optional('shared'),
       choice(
-        $.elementary_type,
-        $.set_type,
-        $.range_type,
-        $.list_type,
-        $.array_type,
-        $.record_type
+        seq(
+          optional('shared'),
+          choice(
+            $.elementary_type,
+            $.set_type,
+            $.range_type,
+            $.list_type,
+            $.array_type,
+          )
+        ),
+        $.record_type,
+        $.subroutine_type,
       )
+    ),
+
+    simple_type: $ => choice(
+      $.elementary_type,
+      $.simple_set_type,
+      $.simple_range_type,
+      $.list_type,
+      $.simple_array_type,
     ),
 
     elementary_type: $ => seq(
@@ -111,8 +124,19 @@ module.exports = grammar({
       )
     ),
 
-    set_type: $ => seq(
-      optional('dynamic'),
+    set_type: $ => choice(
+      $.simple_set_type,
+      $.dynamic_set_type
+    ),
+
+    dynamic_set_type: $ => seq(
+      'dynamic',
+      choice(
+        $.simple_set_type,
+      ),
+    ),
+
+    simple_set_type: $ => seq(
       'set',
       'of',
       optional('constant'),
@@ -140,8 +164,23 @@ module.exports = grammar({
       $.elementary_type
     ),
 
-    array_type: $ => seq(
-      optional(choice("dynamic", "hashmap")),
+    array_type: $ => choice(
+      $.dynamic_array_type,
+      $.hashmap_array_type,
+      $.simple_array_type,
+    ),
+
+    dynamic_array_type: $ => seq(
+      "dynamic",
+      $.simple_array_type
+    ),
+
+    hashmap_array_type: $ => seq(
+      "hashmap",
+      $.simple_array_type
+    ),
+
+    simple_array_type: $ => seq(
       "array",
       "(",
       commaSep1($.set_declaration_or_expression),
@@ -154,6 +193,35 @@ module.exports = grammar({
       "record",
       repeat($.declaration_definition),
       "end-record"
+    ),
+
+    subroutine_type: $ => choice(
+      $.function_type,
+      $.procedure_type,
+    ),
+
+    function_type: $ => seq(
+      "function",
+      optional(
+        seq(
+          "(",
+          optional(field('param_type', $.simple_type)),
+          ")",
+        )
+      ),
+      ":",
+      field("return_type", $.simple_type)
+    ),
+
+    procedure_type: $ => seq(
+      "procedure",
+      optional(
+        seq(
+          "(",
+          optional(field('param_type', $.simple_type)),
+          ")",
+        )
+      ),
     ),
 
     basic_type: $ => choice(
