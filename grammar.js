@@ -89,25 +89,41 @@ module.exports = grammar({
     ),
 
 
-    declaration_definition: $ => seq(
-      commaSep1(field('variable', $.identifier)),
-      ':',
-      choice(
-        seq(
-          optional('shared'),
-          choice(
-            seq(
-              $.elementary_type,
-              optional($.unioned_types)
-            ),
-            $.set_type,
-            $.range_type,
-            $.list_type,
-            $.array_type,
-          )
+    declaration_definition: $ => choice(
+      seq(
+        commaSep1(field('variable', $.identifier)),
+        ':',
+        choice(
+          seq(
+            optional('shared'),
+            choice(
+              seq(
+                $.elementary_type,
+                optional($.unioned_types)
+              ),
+              $.set_type,
+              $.range_type,
+              $.list_type,
+              $.array_type,
+            )
+          ),
+          $.record_type,
+          $.subroutine_type,
+        )
+      ),
+      seq(
+        field('user_type', $.identifier),
+        '=',
+        choice(
+          seq(
+            $.elementary_type,
+            optional($.unioned_types)
+          ),
+          $.simple_set_type,
+          $.simple_range_type,
+          $.list_type,
+          $.simple_array_type,
         ),
-        $.record_type,
-        $.subroutine_type,
       )
     ),
 

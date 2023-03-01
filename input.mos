@@ -52,5 +52,14 @@ model my_model
 
     u: string or integer or boolean
     ua: text or any
+
+
+    entier=integer
+    setint=set of entier
+    arr=array(range) of integer
+    myany=string or integer
+    i:entier           ! <=> i:integer
+    s:setint           ! <=> s:set of integer
+    a:arr              ! <=> a:array(range) of integer
   end-declarations
 end-model
