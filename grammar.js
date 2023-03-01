@@ -96,7 +96,10 @@ module.exports = grammar({
         seq(
           optional('shared'),
           choice(
-            $.elementary_type,
+            seq(
+              $.elementary_type,
+              optional($.unioned_types)
+            ),
             $.set_type,
             $.range_type,
             $.list_type,
@@ -224,6 +227,18 @@ module.exports = grammar({
       ),
     ),
 
+    unioned_types: $ => seq(
+      "or",
+      sep1(
+        "or",
+        choice(
+          $.basic_type,
+          $.user_or_external_type,
+          "any"
+        )
+      )
+    ),
+
     basic_type: $ => choice(
       "integer",
       "real",
@@ -291,4 +306,12 @@ function commaSep1(rule) {
 
 function commaSep(rule) {
   return optional(commaSep1(rule))
+}
+
+function sep1(separator, rule) {
+  return seq(rule, repeat(seq(separator, rule)))
+}
+
+function sep(separator, rule) {
+  return optional(sep1(separator, rule))
 }

@@ -48,5 +48,8 @@ model my_model
     myfunct: function (real):real
     myproc: procedure (real)
     myproc2: procedure
+
+    u: string or integer or boolean
+    ua: text or any
   end-declarations
 end-model
