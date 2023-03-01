@@ -43,6 +43,7 @@ model my_model
         end-record
     r2,r3: record
              i,j:integer
+             a: array(1..19) of string
            end-record
 
     myfunct2: function: set of integer

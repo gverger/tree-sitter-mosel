@@ -169,8 +169,7 @@ module.exports = grammar({
 
     dynamic_range_type: $ => seq(
       'dynamic',
-      'range',
-      optional($.range)
+      $.simple_range_type
     ),
 
     simple_range_type: $ => seq(
