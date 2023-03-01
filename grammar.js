@@ -189,7 +189,7 @@ module.exports = grammar({
       commaSep1($.set_declaration_or_expression),
       ")",
       "of",
-      $.elementary_type
+      $.simple_type
     ),
 
     record_type: $ => seq(
@@ -262,7 +262,8 @@ module.exports = grammar({
       choice(
         $.set_type,
         $.simple_range_type,
-        $.elementary_type
+        $.elementary_type,
+        $.range
       )
     ),
 

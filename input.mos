@@ -33,6 +33,7 @@ model my_model
     a1,a2: array ( S:set of string ) of real
 
     a1,a2: array ( range, S:set of string ) of real
+    a2:array(1..10) of set of integer
 
     e: set of string
     t1:array ( e, rs:set of real, range, integer ) of real
