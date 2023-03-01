@@ -97,7 +97,8 @@ module.exports = grammar({
         $.elementary_type,
         $.set_type,
         $.range_type,
-        $.list_type
+        $.list_type,
+        $.array_type
       )
     ),
 
@@ -111,19 +112,40 @@ module.exports = grammar({
 
     set_type: $ => seq(
       optional('dynamic'),
-      'set of',
+      'set',
+      'of',
       optional('constant'),
       $.elementary_type
     ),
 
-    range_type: $ => seq(
-      optional('dynamic'),
+    range_type: $ => choice(
+      $.simple_range_type,
+      $.dynamic_range_type
+    ),
+
+    dynamic_range_type: $ => seq(
+      'dynamic',
+      'range',
+      optional($.range)
+    ),
+
+    simple_range_type: $ => seq(
       'range',
       optional($.range)
     ),
 
     list_type: $ => seq(
       'list of',
+      $.elementary_type
+    ),
+
+    array_type: $ => seq(
+      optional(choice("dynamic", "hashmap")),
+      "array",
+      "(",
+      commaSep1($.set_declaration_or_expression),
+      ")",
+      "of",
       $.elementary_type
     ),
 
@@ -139,6 +161,20 @@ module.exports = grammar({
     ),
 
     user_or_external_type: $ => $.identifier,
+
+    set_declaration_or_expression: $ => seq(
+      optional(
+        seq(
+          field('name', $.identifier),
+          ':',
+        )
+      ),
+      choice(
+        $.set_type,
+        $.simple_range_type,
+        $.elementary_type
+      )
+    ),
 
     value: $ => choice(
       $.integer,

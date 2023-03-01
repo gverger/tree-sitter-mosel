@@ -29,5 +29,13 @@ model my_model
     ds: set of constant date   ! type 'date' from module 'mmsystem'
 
     r: dynamic range 1..3
+
+    a1,a2: array ( S:set of string ) of real
+
+    a1,a2: array ( range, S:set of string ) of real
+
+    e: set of string
+    t1:array ( e, rs:set of real, range, integer ) of real
+    t2:array ( {"i1","i2"}, 1..3 ) of integer
   end-declarations
 end-model
